@@ -71,7 +71,14 @@ internal class MonthItemRenderer(private val config: DatePickerConfig) {
     textView.apply {
       setTextColor(createTextSelector(context, config.selectionColor))
         if (config.enableChineseCalendar){
-            text = solarDate2LunarDateString(dayOfMonth)
+            val year = dayOfMonth.month.year
+            val month = dayOfMonth.month.month+1
+            val day = dayOfMonth.date
+            var dayInMonthStr = dayOfMonth.date.positiveOrEmptyAsString()
+            if (dayInMonthStr.isNotBlank()) {
+                dayInMonthStr += "\n${LunarCalendarUtils.solarDate2LunarDateDayInMonthStr(year,month,day)}"
+            }
+            text = dayInMonthStr
         }else{
             text = dayOfMonth.date.positiveOrEmptyAsString()
         }

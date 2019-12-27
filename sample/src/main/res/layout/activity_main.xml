@@ -4,16 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
-  <com.afollestad.date.DatePicker
-      android:id="@+id/datePicker"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      app:date_picker_enble_chinese_lunar_calendar="true"
-      app:date_picker_calendar_horizontal_padding="4dp"
-      tools:ignore="UnusedAttribute"
-      />
-  <!--      app:date_picker_medium_font="@font/fira_sans_medium"-->
-  <!--      app:date_picker_normal_font="@font/fira_sans_light"-->
+    android:background="@color/cardview_dark_background">
+
+    <com.afollestad.date.DatePicker
+        android:id="@+id/datePicker"
+        android:layout_width="270dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        app:date_picker_background_radius="16dp"
+        app:date_picker_calendar_horizontal_padding="4dp"
+        app:date_picker_enble_chinese_lunar_calendar="true"
+        tools:ignore="UnusedAttribute" />
+    <!--      app:date_picker_medium_font="@font/fira_sans_medium"-->
+    <!--      app:date_picker_normal_font="@font/fira_sans_light"-->
 </FrameLayout>
 

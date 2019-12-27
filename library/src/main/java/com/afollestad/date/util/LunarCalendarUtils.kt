@@ -1,5 +1,8 @@
 package com.afollestad.date.util
 
+import java.util.*
+
+
 /**
  * Author:你需要一台永动机
  * Date:2019-12-26 17:25
@@ -15,7 +18,7 @@ object LunarCalendarUtils {
      */
     private val CHINESE_NUMBER = arrayOf(
         "一", "二", "三", "四", "五",
-        "六", "七", "八", "九", "十", "十一", "腊"
+        "六", "七", "八", "九", "十", "冬", "腊"
     )
     /**
      * 用来表示1900年到2099年间农历年份的相关信息，共24位bit的16进制表示，其中：
@@ -805,6 +808,21 @@ object LunarCalendarUtils {
         return (365 * y + y / 4 - y / 100 + y / 400 + (m * 306 + 5) / 10 + (d - 1)).toLong()
     }
 
+
+    /**
+     * 根据农历年份获取天干地支
+     * @param lunarYear 农历年份
+     * @return String of Ganzhi: 甲子年 Tiangan:甲乙丙丁戊己庚辛壬癸
+     * Dizhi: 子丑寅卯辰巳无为申酉戌亥
+     */
+    fun lunarYearToGanZhi(lunarYear: Int): String? {
+        val tianGan =
+            arrayOf("甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸")
+        val diZhi =
+            arrayOf("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+        return tianGan[(lunarYear - 4) % 10] + diZhi[(lunarYear - 4) % 12] + "年"
+    }
+
     /**
      * 公历转农历
      */
@@ -854,7 +872,7 @@ object LunarCalendarUtils {
         return lunar
     }
 
-    class Solar(var solarYear: Int, var solarMonth: Int, var solarDay: Int){
+    class Solar(var solarYear: Int, var solarMonth: Int, var solarDay: Int) {
         override fun toString(): String {
             return "$solarYear-$solarMonth-$solarDay"
         }
@@ -868,5 +886,130 @@ object LunarCalendarUtils {
         override fun toString(): String {
             return "$lunarYear-$lunarMonth-$lunarDay"
         }
+    }
+
+
+
+    /**
+     * 阳历转农历
+     */
+    fun solarDate2LunarDateDayInMonthStr(solarYear: Int, solarMonth: Int, solarDay: Int): String {
+        var dayInMonthStr = ""
+        val solar = Solar(solarYear, solarMonth, solarDay)
+        val lunar = solarToLunar(solar)
+        val holidayOfLunar = getLunarHoliday(
+            lunar.lunarYear,
+            lunar.lunarMonth,
+            lunar.lunarDay
+        )
+
+        //Log.d("pmm", "农历：${lunar.toString()} 农历假期：${holidayOfLunar}")
+        val holidayOfSolar = CalendarUtils.getHolidayFromSolar(
+            solar.solarYear,
+            solar.solarMonth - 1,
+            solar.solarDay
+        )
+        //Log.d("pmm", "公历历：${solar.toString()} 公历假期：${holidayOfSolar}")
+        if (holidayOfLunar.isNotBlank()) {
+            dayInMonthStr = holidayOfLunar
+        } else if (holidayOfSolar.isNotBlank()) {
+            dayInMonthStr = holidayOfSolar
+        } else {
+            if (lunar.lunarDay == 1) {
+                val lunarFirstDayStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
+                dayInMonthStr = lunarFirstDayStr
+            } else {
+                dayInMonthStr = getLunarDayString(lunar.lunarDay)
+            }
+        }
+
+        return dayInMonthStr
+    }
+
+
+    /**
+     *
+     * @author:518ad-ccn
+     *
+     * date:Dec 16, 2011
+     *
+     * describe：计算天干地支,12生肖
+     *
+     * 计算规则相对简单，详细计算规则请参照百度百科http://baike.baidu.com/view/13672.htm
+     */
+    private val tgdz =
+        arrayOf(
+            arrayOf(
+                "甲",
+                "乙",
+                "丙",
+                "丁",
+                "戊",
+                "己",
+                "庚",
+                "辛",
+                "壬",
+                "癸"
+            ),
+            arrayOf("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
+        ) //12地支
+    //12生肖，（注：12生肖对应12地支，即子鼠，丑牛,寅虎依此类推）
+    private val animalYear =
+        arrayOf("鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪")
+    private const val startYear = 1804 //定义起始年，1804年为甲子年属鼠
+    /**获取当前年份与起始年之间的差值 */
+    fun subtractYear(year: Int): Int {
+        var jiaziYear = startYear
+        if (year < jiaziYear) { //如果年份小于起始的甲子年(startYear = 1804),则起始甲子年往前偏移
+            jiaziYear = jiaziYear - (60 + 60 * ((jiaziYear - year) / 60)) //60年一个周期
+        }
+        return year - jiaziYear
+    }
+
+    /**获取该年的天干名称 */
+    fun getTianGanName(year: Int): String {
+        return tgdz[0][subtractYear(year) % 10]
+    }
+
+    /**获取该年的地支名称 */
+    fun getDiZhiName(year: Int): String {
+        return tgdz[1][subtractYear(year) % 12]
+    }
+
+    /**
+     *
+     * 获取该年的天干、地支名称
+     *
+     * @param year 年份
+     *
+     * @return
+     */
+    fun getTGDZName(year: Int): String {
+        return getTianGanName(year) + getDiZhiName(year)
+    }
+
+    /**
+     *
+     * 获取该年的生肖名称
+     *
+     * @param year 年份
+     *
+     * @return
+     */
+    fun getAnimalYearName(year: Int): String {
+        return animalYear[subtractYear(year) % 12]
+    }
+
+
+    /**
+     * 获取满的农历日期 天干地支+生效
+     */
+    fun getFullLunarDayStr(year:Int,month:Int,day:Int): String {
+        val solar = Solar(year, month, day)
+        val lunar = solarToLunar(solar)
+
+        val lunarMonthStr = getLunarFirstDayString(lunar.lunarMonth,lunar.isLeap)
+        val lunarDayStr= getLunarDayString(lunar.lunarDay)
+        return "${getTGDZName(lunar.lunarYear)}${getAnimalYearName(lunar.lunarYear)}年 $lunarMonthStr$lunarDayStr"
     }
 }
