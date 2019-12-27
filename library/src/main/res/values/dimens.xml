@@ -4,7 +4,7 @@
   <dimen name="current_month_header_padding_sides">24dp</dimen>
   <dimen name="current_month_top_margin">1dp</dimen>
 
-  <dimen name="edit_mode_toggle_size">22dp</dimen>
+  <dimen name="edit_mode_toggle_size">28dp</dimen>
   <dimen name="edit_mode_toggle_padding">2dp</dimen>
   <dimen name="edit_mode_input_margin_sides">16dp</dimen>
   <dimen name="edit_mode_input_margin_top">16dp</dimen>
