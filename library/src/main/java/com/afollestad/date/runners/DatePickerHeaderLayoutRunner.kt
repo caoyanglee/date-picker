@@ -16,6 +16,7 @@
 package com.afollestad.date.runners
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View.MeasureSpec.EXACTLY
@@ -85,7 +86,7 @@ internal class DatePickerHeaderLayoutRunner(
     private fun setupTitle() {
         pickerTitleView.apply {
             background = GradientDrawable().apply {
-                setColor(config.headerBackgroundColor)
+                this.setColor(config.headerBackgroundColor)
                 cornerRadii = floatArrayOf(
                     config.backgroundRadius,
                     config.backgroundRadius,
@@ -99,6 +100,7 @@ internal class DatePickerHeaderLayoutRunner(
             }
             typeface = config.normalFont
             text = config.title
+            setTextColor(config.headerTextIconColor)
         }
     }
 
@@ -107,6 +109,7 @@ internal class DatePickerHeaderLayoutRunner(
             isSelected = true
             background = ColorDrawable(config.headerBackgroundColor)
             typeface = config.normalFont
+            setTextColor(config.headerTextIconColor)
         }
     }
 
@@ -116,6 +119,7 @@ internal class DatePickerHeaderLayoutRunner(
                 context, context.resolveColor(android.R.attr.textColorPrimaryInverse)
             )
             onClickDebounced { config.currentMode.toggleMode(INPUT_EDIT) }
+            this.setColorFilter(config.headerTextIconColor)
         }
     }
 

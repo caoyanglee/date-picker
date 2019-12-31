@@ -16,6 +16,8 @@
 package com.afollestad.date.runners.calendar
 
 import android.content.Context
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import android.view.View
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
@@ -103,7 +105,7 @@ internal class CalendarNavigationLayoutRunner(
     val expanded = currentMode == YEAR_LIST
     val currentMonthChevronDrawable = context.drawable(
         if (expanded) R.drawable.ic_chevron_up else R.drawable.ic_chevron_down,
-        context.resolveColor(android.R.attr.textColorSecondary)
+        config.textIconColor
     )
     visibleMonthView.setCompoundDrawablesCompat(end = currentMonthChevronDrawable)
   }
@@ -111,14 +113,17 @@ internal class CalendarNavigationLayoutRunner(
   private fun setupVisibleMonth() {
     visibleMonthView.apply {
       typeface = config.mediumFont
+      setTextColor(config.textIconColor)
       onClickDebounced { config.currentMode.toggleMode() }
     }
   }
 
   private fun setupChevrons() {
     goPreviousMonthView.background = createCircularSelector(context, config.selectionColor)
+    goPreviousMonthView.setColorFilter(config.textIconColor)
     invalidateCurrentMonthChevron()
     goNextMonthView.background = createCircularSelector(context, config.selectionColor)
+    goNextMonthView.setColorFilter(config.textIconColor)
   }
 
   override fun measure(

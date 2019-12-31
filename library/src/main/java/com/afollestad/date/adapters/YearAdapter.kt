@@ -76,6 +76,7 @@ internal class YearAdapter(
     val view = parent.inflate<ViewGroup>(R.layout.year_list_row)
     return YearViewHolder(view, this).apply {
       textView.background = createRoundedRectangleSelector(context, config.selectionColor)
+      textView.setTextColor(config.textIconColor)
     }
   }
 

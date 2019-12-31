@@ -85,6 +85,8 @@ internal class ManualInputLayoutRunner(
       hint = pattern
       filters += LengthFilter(pattern.length)
       onTextChanged(requiredLength = pattern.length) { onDateInput(it) }
+      setTextColor(config.textIconColor)
+      setHintTextColor(config.textIconColor)
     }
   }
 

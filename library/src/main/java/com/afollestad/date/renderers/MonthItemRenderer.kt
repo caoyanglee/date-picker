@@ -15,6 +15,7 @@
  */
 package com.afollestad.date.renderers
 
+import android.graphics.Color
 import android.view.Gravity.CENTER
 import android.view.View
 import android.widget.TextView
@@ -35,124 +36,88 @@ import java.util.Calendar
 
 /** @author Aidan Follestad (@afollestad) */
 internal class MonthItemRenderer(private val config: DatePickerConfig) {
-  private val calendar = Calendar.getInstance()
+    private val calendar = Calendar.getInstance()
 
-  fun render(
-    item: MonthItem,
-    rootView: View,
-    textView: TextView,
-    onSelection: (DayOfMonth) -> Unit
-  ) {
-    when (item) {
-      is WeekHeader -> renderWeekHeader(item.dayOfWeek, textView)
-      is DayOfMonth -> renderDayOfMonth(item, rootView, textView, onSelection)
-    }
-  }
-
-  private fun renderWeekHeader(
-    dayOfWeek: DayOfWeek,
-    textView: TextView
-  ) {
-    textView.apply {
-      setTextColor(context.resolveColor(android.R.attr.textColorSecondary))
-      calendar.dayOfWeek = dayOfWeek
-      text = config.dateFormatter.weekdayAbbreviation(calendar)
-      typeface = config.normalFont
-    }
-  }
-
-  private fun renderDayOfMonth(
-    dayOfMonth: DayOfMonth,
-    rootView: View,
-    textView: TextView,
-    onSelection: (DayOfMonth) -> Unit
-  ) {
-    rootView.background = null
-    textView.apply {
-      setTextColor(createTextSelector(context, config.selectionColor))
-        if (config.enableChineseCalendar){
-            val year = dayOfMonth.month.year
-            val month = dayOfMonth.month.month+1
-            val day = dayOfMonth.date
-            var dayInMonthStr = dayOfMonth.date.positiveOrEmptyAsString()
-            if (dayInMonthStr.isNotBlank()) {
-                dayInMonthStr += "\n${LunarCalendarUtils.solarDate2LunarDateDayInMonthStr(year,month,day)}"
-            }
-            text = dayInMonthStr
-        }else{
-            text = dayOfMonth.date.positiveOrEmptyAsString()
+    fun render(
+        item: MonthItem,
+        rootView: View,
+        textView: TextView,
+        onSelection: (DayOfMonth) -> Unit
+    ) {
+        when (item) {
+            is WeekHeader -> renderWeekHeader(item.dayOfWeek, textView)
+            is DayOfMonth -> renderDayOfMonth(item, rootView, textView, onSelection)
         }
-
-      typeface = config.normalFont
-      gravity = CENTER
-      background = null
-      setOnClickListener(null)
     }
 
-    if (dayOfMonth.date == NO_DATE) {
-      rootView.isEnabled = false
-      textView.isSelected = false
-      textView.isActivated = false
-      return
+    private fun renderWeekHeader(
+        dayOfWeek: DayOfWeek,
+        textView: TextView
+    ) {
+        textView.apply {
+            setTextColor(config.textIconColor)
+            calendar.dayOfWeek = dayOfWeek
+            text = config.dateFormatter.weekdayAbbreviation(calendar)
+            typeface = config.normalFont
+        }
     }
 
-    rootView.isEnabled = textView.text.toString()
-        .isNotEmpty()
-    textView.apply {
-      isSelected = dayOfMonth.isSelected
-      isActivated = dayOfMonth.isToday
-      background = createCircularSelector(
-          context = context,
-          selectedColor = config.selectionColor,
-          todayStrokeColor = config.todayStrokeColor
-      )
-      onClickDebounced { onSelection(dayOfMonth) }
-    }
-  }
+    private fun renderDayOfMonth(
+        dayOfMonth: DayOfMonth,
+        rootView: View,
+        textView: TextView,
+        onSelection: (DayOfMonth) -> Unit
+    ) {
+        rootView.background = null
 
-  private fun Int.positiveOrEmptyAsString(): String {
-    return if (this < 1) "" else toString()
-  }
-
-    private fun solarDate2LunarDateString(dayOfMonth: DayOfMonth):String{
-        var dayInMonthStr = dayOfMonth.date.positiveOrEmptyAsString()
-        //Log.d("pmm", dayOfMonth.toString())
-        val year = dayOfMonth.month.year
-        val month = dayOfMonth.month.month+1
-        val day = dayOfMonth.date
-        if (dayInMonthStr.isNotBlank()) {
-            val solar = LunarCalendarUtils.Solar(year, month, day)
-            val lunar = LunarCalendarUtils.solarToLunar(solar)
-            var lunarStr = ""
-            val holidayOfLunar = LunarCalendarUtils.getLunarHoliday(
-                lunar.lunarYear,
-                lunar.lunarMonth,
-                lunar.lunarDay
-            )
-
-            //Log.d("pmm", "农历：${lunar.toString()} 农历假期：${holidayOfLunar}")
-            val holidayOfSolar = CalendarUtils.getHolidayFromSolar(
-                solar.solarYear,
-                solar.solarMonth-1,
-                solar.solarDay
-            )
-            //Log.d("pmm", "公历历：${solar.toString()} 公历假期：${holidayOfSolar}")
-            if (holidayOfLunar.isNotBlank()) {
-                lunarStr = holidayOfLunar
-            } else if (holidayOfSolar.isNotBlank()) {
-                lunarStr = holidayOfSolar
-            } else {
-                if (lunar.lunarDay==1){
-                    val lunarFirstDayStr =LunarCalendarUtils.getLunarFirstDayString(lunar.lunarMonth,lunar.isLeap)
-                    lunarStr = lunarFirstDayStr
-                }else {
-                    lunarStr = LunarCalendarUtils.getLunarDayString(lunar.lunarDay)
+        textView.apply {
+            setTextColor(createTextSelector(context, config.selectionColor,config.textIconColor))
+            //是否开启农历
+            if (config.enableChineseCalendar) {
+                val year = dayOfMonth.month.year
+                val month = dayOfMonth.month.month + 1
+                val day = dayOfMonth.date
+                var dayInMonthStr = dayOfMonth.date.positiveOrEmptyAsString()
+                if (dayInMonthStr.isNotBlank()) {
+                    dayInMonthStr += "\n${LunarCalendarUtils.solarDate2LunarDateDayInMonthStr(
+                        year,
+                        month,
+                        day
+                    )}"
                 }
+                text = dayInMonthStr
+            } else {
+                text = dayOfMonth.date.positiveOrEmptyAsString()
             }
 
-
-            dayInMonthStr += "\n${lunarStr}"
+            typeface = config.normalFont
+            gravity = CENTER
+            background = null
+            setOnClickListener(null)
         }
-        return dayInMonthStr
+
+        if (dayOfMonth.date == NO_DATE) {
+            rootView.isEnabled = false
+            textView.isSelected = false
+            textView.isActivated = false
+            return
+        }
+
+        rootView.isEnabled = textView.text.toString()
+            .isNotEmpty()
+        textView.apply {
+            isSelected = dayOfMonth.isSelected
+            isActivated = dayOfMonth.isToday
+            background = createCircularSelector(
+                context = context,
+                selectedColor = config.selectionColor,
+                todayStrokeColor = config.todayStrokeColor
+            )
+            onClickDebounced { onSelection(dayOfMonth) }
+        }
+    }
+
+    private fun Int.positiveOrEmptyAsString(): String {
+        return if (this < 1) "" else toString()
     }
 }

@@ -21,6 +21,7 @@ import android.util.AttributeSet
 import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
 import androidx.annotation.Px
+import androidx.core.content.ContextCompat
 import com.afollestad.date.controllers.VibratorController
 import com.afollestad.date.data.DateFormatter
 import com.afollestad.date.runners.Mode
@@ -32,12 +33,13 @@ import com.afollestad.date.util.font
 import com.afollestad.date.util.resolveColor
 import com.afollestad.date.util.string
 import com.afollestad.date.util.withAlpha
-import java.util.*
 
 /** @author Aidan Follestad (@afollestad) */
 internal data class DatePickerConfig(
     @ColorInt val headerBackgroundColor: Int,
+    @ColorInt val headerTextIconColor: Int,
     @ColorInt val selectionColor: Int,
+    @ColorInt val textIconColor: Int,
     val normalFont: Typeface,
     val mediumFont: Typeface,
     @Px val horizontalPadding: Int,
@@ -70,8 +72,14 @@ internal fun DatePickerConfig.Companion.create(
         headerBackgroundColor = ta.color(R.styleable.DatePicker_date_picker_header_background_color) {
             context.resolveColor(R.attr.colorAccent)
         },
+        headerTextIconColor = ta.color(R.styleable.DatePicker_date_picker_header_text_icon_color) {
+            context.resolveColor(android.R.attr.textColorPrimaryInverse)
+        },
         selectionColor = ta.color(R.styleable.DatePicker_date_picker_selection_color) {
             context.resolveColor(R.attr.colorAccent)
+        },
+        textIconColor = ta.color(R.styleable.DatePicker_date_picker_text_icon_color) {
+            context.resolveColor(android.R.attr.textColorPrimary)
         },
         normalFont = ta.font(context, R.styleable.DatePicker_date_picker_normal_font) {
             TypefaceHelper.create("sans-serif")
@@ -99,7 +107,7 @@ internal fun DatePickerConfig.Companion.create(
             .let { Mode.fromRawValue(it) },
         vibrator = if (selectionVibrates) VibratorController(context) else null,
         bodyBackgroundColor = ta.color(R.styleable.DatePicker_date_picker_background_color) {
-            context.resolveColor(android.R.attr.colorBackground)
+            ContextCompat.getColor(context, android.R.color.transparent)
         },
         backgroundRadius = ta.getDimensionPixelSize(
             R.styleable.DatePicker_date_picker_background_radius, 0

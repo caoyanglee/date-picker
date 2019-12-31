@@ -28,6 +28,7 @@ import android.graphics.drawable.StateListDrawable
 import android.os.Build
 import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import com.afollestad.date.R
 
 /** @author Aidan Follestad (@afollestad) */
@@ -37,6 +38,7 @@ internal object Util {
   @CheckResult fun createTextSelector(
     context: Context,
     @ColorInt selectedColor: Int,
+    @ColorInt defaultColor:Int,
     overColoredBackground: Boolean = true
   ): ColorStateList {
     val states = arrayOf(
@@ -45,7 +47,7 @@ internal object Util {
         intArrayOf(android.R.attr.state_enabled, android.R.attr.state_selected)
     )
     val disabledTextColor = context.resolveColor(android.R.attr.textColorPrimaryDisableOnly)
-    val primaryTextColor = context.resolveColor(android.R.attr.textColorPrimary)
+    val primaryTextColor = defaultColor
     val colors = intArrayOf(
         disabledTextColor,
         primaryTextColor,
