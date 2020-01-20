@@ -1,7 +1,5 @@
 package com.afollestad.date.util
 
-import java.util.*
-
 
 /**
  * Author:你需要一台永动机
@@ -20,14 +18,78 @@ object LunarCalendarUtils {
         "一", "二", "三", "四", "五",
         "六", "七", "八", "九", "十", "冬", "腊"
     )
+
     /**
      * 用来表示1900年到2099年间农历年份的相关信息，共24位bit的16进制表示，其中：
      * 1. 前4位表示该年闰哪个月；
      * 2. 5-17位表示农历年份13个月的大小月分布，0表示小，1表示大；
      * 3. 最后7位表示农历年首（正月初一）对应的公历日期。
+     *
      * 以2014年的数据0x955ABF为例说明：
      * 1001 0101 0101 1010 1011 1111
      * 闰九月  农历正月初一对应公历1月31号
+     *
+     * 2019 0x0A9345
+     * 0000 1010 1001 0011 0100 0101
+     *
+     * 润0月
+     * 1-b
+     * 2-s
+     * 3-b
+     * 4-s
+     *
+     * 5-b
+     * 6-s
+     * 7-s
+     * 8-b
+     *
+     * 9-s
+     * 10-s
+     * 11-b
+     * 12-b
+     *
+     * 13-s
+     * 正月初一：2-5
+     *
+     * 2020 0x474AB9
+     * 0100 0111 0100 1010 1011 1001
+     *
+     * 润4月
+     * 1-s
+     * 2-b
+     * 3-b
+     * 4-b
+     * 5-s
+     * 6-b
+     * 7-s
+     * 8-s
+     * 9-b
+     * 10-s
+     * 11-b
+     * 12-s
+     * 13-b
+     * 正月初一：1-25
+     *
+     * 2021 0x06AA4C
+     * 0000 0110 1010 1010 0100 1100
+     * 润0月
+     * 1-s
+     * 2-b
+     * 3-b
+     * 4-s
+     *
+     * 5-b
+     * 6-s
+     * 7-b
+     * 8-s
+     *
+     * 9-b
+     * 10-s
+     * 11-b
+     * 12-s
+     *
+     * 13-s
+     * 正月初一：2-12
      */
     private val LUNAR_INFO = intArrayOf(
         0x84B6BF,  /*1900*/
@@ -159,7 +221,7 @@ object LunarCalendarUtils {
         0x0A4E51,
         0x0D2646,
         0x5E933A,
-        0x0D534D,
+        0x0C9645,
         0x05AA43,  /*2021-2030*/
         0x36B537,
         0x096D4B,
@@ -246,9 +308,9 @@ object LunarCalendarUtils {
      * @param month 要计算的月
      * @return 传回天数
      */
-    @JvmOverloads
-    fun daysInMonth(year: Int, month: Int, leap: Boolean = false): Int {
+    fun daysInMonth(year: Int, month: Int): Int {
         val leapMonth = leapMonth(year)
+        val leap = leapMonth == month
         var offset = 0
         // 如果本年有闰月且month大于闰月时，需要校正
         if (leapMonth != 0 && month > leapMonth) {
@@ -272,7 +334,7 @@ object LunarCalendarUtils {
      * @param month 将要计算的月份
      * @return 传回农历 year年month月的总天数
      */
-    fun daysInLunarMonth(year: Int, month: Int): Int {
+    private fun daysInLunarMonth(year: Int, month: Int): Int {
         return if (LUNAR_INFO[year - MIN_YEAR] and (0x100000 shr month) == 0) 29 else 30
     }
 
@@ -311,11 +373,9 @@ object LunarCalendarUtils {
             message = "腊八节"
         } else {
             if (month == 12) {
-                if (daysInLunarMonth(year, month) == 29 && day == 29
-                    || daysInLunarMonth(
-                        year,
-                        month
-                    ) == 30 && day == 30
+                //Log.d("pmm", "农历年：${year} ${month}月的天数：${daysInMonth(year, month)}")
+                if (daysInMonth(year, month) == 29 && day == 29 ||
+                    daysInMonth(year, month) == 30 && day == 30
                 ) {
                     message = "除夕"
                 }
@@ -337,8 +397,12 @@ object LunarCalendarUtils {
         return if (day == 10) "初十" else chineseTen[day / 10] + CHINESE_NUMBER[n]
     }
 
+    /**
+     * 返回农历 月
+     */
     fun getLunarFirstDayString(month: Int, isLeap: Boolean): String {
-        return if (isLeap) "闰" + CHINESE_NUMBER[month - 1] + "月" else CHINESE_NUMBER[month - 1] + "月"
+        val monthStr = if (month - 1 == 0) "正" else CHINESE_NUMBER[month - 1]
+        return if (isLeap) "闰" + monthStr + "月" else monthStr + "月"
     }
 
     private val lunar_month_days = intArrayOf(
@@ -889,7 +953,6 @@ object LunarCalendarUtils {
     }
 
 
-
     /**
      * 阳历转农历
      */
@@ -1002,14 +1065,17 @@ object LunarCalendarUtils {
 
 
     /**
-     * 获取满的农历日期 天干地支+生效
+     * 获取满的农历日期 天干地支+生肖
+     *
+     * @param year 公历 年
+     * @param month 公历 月
+     * @param day 公历 日
      */
-    fun getFullLunarDayStr(year:Int,month:Int,day:Int): String {
-        val solar = Solar(year, month, day)
+    fun getFullLunarDayStr(year: Int, month: Int, day: Int): String {
+        val solar = Solar(year, month+1, day)
         val lunar = solarToLunar(solar)
-
-        val lunarMonthStr = getLunarFirstDayString(lunar.lunarMonth,lunar.isLeap)
-        val lunarDayStr= getLunarDayString(lunar.lunarDay)
+        val lunarMonthStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
+        val lunarDayStr = getLunarDayString(lunar.lunarDay)
         return "${getTGDZName(lunar.lunarYear)}${getAnimalYearName(lunar.lunarYear)}年 $lunarMonthStr$lunarDayStr"
     }
 }

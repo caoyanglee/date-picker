@@ -75,7 +75,7 @@ internal class DatePickerHeaderLayoutRunner(
         selectedDate.asCalendar()
             .let {
                 if (config.enableChineseCalendar) {
-                    val lunarStr = LunarCalendarUtils.getFullLunarDayStr(it.year,it.month+1,it.dayOfMonth)
+                    val lunarStr = LunarCalendarUtils.getFullLunarDayStr(it.year,it.month,it.dayOfMonth)
                     selectedDateView.text = config.dateFormatter.date(it)+" \n${lunarStr}"
                 } else {
                     selectedDateView.text = config.dateFormatter.date(it)
