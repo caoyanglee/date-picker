@@ -8,7 +8,7 @@
 
     <com.afollestad.date.DatePicker
         android:id="@+id/datePicker"
-        android:layout_width="600dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:date_picker_background_color="@android:color/transparent"

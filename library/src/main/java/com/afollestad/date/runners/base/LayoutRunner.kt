@@ -74,11 +74,12 @@ internal enum class Orientation {
 
   companion object {
     fun get(context: Context): Orientation {
-      return if (context.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
-        PORTRAIT
-      } else {
-        LANDSCAPE
-      }
+      return PORTRAIT
+//      return if (context.resources.configuration.orientation == ORIENTATION_PORTRAIT) {
+//        PORTRAIT
+//      } else {
+//        LANDSCAPE
+//      }
     }
   }
 }
