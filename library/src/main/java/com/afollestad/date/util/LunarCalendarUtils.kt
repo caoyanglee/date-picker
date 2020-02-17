@@ -291,7 +291,8 @@ object LunarCalendarUtils {
         0x4A4EB9,
         0x0A4D4C,
         0x0D1541,
-        0x2D92B5 /*2091-2099*/
+        0x2D92B5,
+        0x0D5245/*2091-2100*/
     )
     /**
      * 传回农历year年month月的总天数
@@ -1072,7 +1073,7 @@ object LunarCalendarUtils {
      * @param day 公历 日
      */
     fun getFullLunarDayStr(year: Int, month: Int, day: Int): String {
-        val solar = Solar(year, month+1, day)
+        val solar = Solar(year, month + 1, day)
         val lunar = solarToLunar(solar)
         val lunarMonthStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
         val lunarDayStr = getLunarDayString(lunar.lunarDay)
