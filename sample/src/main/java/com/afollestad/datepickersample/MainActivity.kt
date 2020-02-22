@@ -28,5 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     datePicker = findViewById(R.id.datePicker)
     datePicker.addOnDateChanged { _, new -> toast("Date changed: ${new.format()}") }
+    datePicker.openVibrator(false)
   }
 }

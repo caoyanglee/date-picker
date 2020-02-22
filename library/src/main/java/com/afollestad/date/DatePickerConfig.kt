@@ -47,7 +47,7 @@ internal data class DatePickerConfig(
     val title: CharSequence,
     val manualInputLabel: CharSequence,
     val defaultMode: Mode,
-    val vibrator: VibratorController?,
+    var vibrator: VibratorController?,
     val dateFormatter: DateFormatter = DateFormatter(),
     var currentMode: ObservableValue<Mode> = ObservableValue(defaultMode),
     @ColorInt var bodyBackgroundColor: Int,
