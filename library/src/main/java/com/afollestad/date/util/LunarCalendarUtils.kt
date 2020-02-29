@@ -1,5 +1,8 @@
 package com.afollestad.date.util
 
+import android.content.Context
+import com.afollestad.date.R
+
 
 /**
  * Author:你需要一台永动机
@@ -1017,9 +1020,6 @@ object LunarCalendarUtils {
             ),
             arrayOf("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
         ) //12地支
-    //12生肖，（注：12生肖对应12地支，即子鼠，丑牛,寅虎依此类推）
-    private val animalYear =
-        arrayOf("鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪")
     private const val startYear = 1804 //定义起始年，1804年为甲子年属鼠
     /**获取当前年份与起始年之间的差值 */
     fun subtractYear(year: Int): Int {
@@ -1052,6 +1052,10 @@ object LunarCalendarUtils {
         return getTianGanName(year) + getDiZhiName(year)
     }
 
+
+    //12生肖，（注：12生肖对应12地支，即子鼠，丑牛,寅虎依此类推）
+    private val animalYear = arrayOf("鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪")
+
     /**
      *
      * 获取该年的生肖名称
@@ -1060,10 +1064,40 @@ object LunarCalendarUtils {
      *
      * @return
      */
-    fun getAnimalYearName(year: Int): String {
-        return animalYear[subtractYear(year) % 12]
-    }
+    fun getAnimalYearName(year: Int) = animalYear[subtractYear(year) % 12]
 
+    /**
+     * 获取该年的生肖position
+     */
+    fun getAnimalYearPosition(year: Int) = subtractYear(year) % 12
+
+    /**
+     *
+     * 获取该年的生肖名称
+     *
+     * @param year 年份
+     *
+     * @return
+     */
+    fun getAnimalYearName4Universal(context: Context, year: Int): String {
+        //获取文本
+        fun getStr(StringRes: Int): String = context.getString(StringRes)
+        return when (subtractYear(year) % 12) {
+            0 -> getStr(R.string.animals_mouse)
+            1 -> getStr(R.string.animals_cow)
+            2 -> getStr(R.string.animals_tiger)
+            3 -> getStr(R.string.animals_rabbit)
+            4 -> getStr(R.string.animals_dragon)
+            5 -> getStr(R.string.animals_snake)
+            6 -> getStr(R.string.animals_horse)
+            7 -> getStr(R.string.animals_sheep)
+            8 -> getStr(R.string.animals_monkey)
+            9 -> getStr(R.string.animals_chicken)
+            10 -> getStr(R.string.animals_dog)
+            11 -> getStr(R.string.animals_pig)
+            else -> ""
+        }
+    }
 
     /**
      * 获取满的农历日期 天干地支+生肖

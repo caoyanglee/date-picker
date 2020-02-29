@@ -4,4 +4,17 @@
     <string name="next_month">下个月</string>
     <string name="select_date">选择日期</string>
     <string name="enter_date">转至特定日期</string>
+
+    <string name="animals_mouse">鼠</string>
+    <string name="animals_cow">牛</string>
+    <string name="animals_tiger">虎</string>
+    <string name="animals_rabbit">兔</string>
+    <string name="animals_dragon">龙</string>
+    <string name="animals_snake">蛇</string>
+    <string name="animals_horse">马</string>
+    <string name="animals_sheep">羊</string>
+    <string name="animals_monkey">猴</string>
+    <string name="animals_chicken">鸡</string>
+    <string name="animals_dog">狗</string>
+    <string name="animals_pig">猪</string>
 </resources>

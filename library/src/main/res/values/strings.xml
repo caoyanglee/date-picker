@@ -4,4 +4,17 @@
   <string name="next_month">Next month</string>
   <string name="select_date">SELECT DATE</string>
   <string name="enter_date">Enter Date</string>
+
+  <string name="animals_mouse">Mouse</string>
+  <string name="animals_cow">Cow</string>
+  <string name="animals_tiger">Tiger</string>
+  <string name="animals_rabbit">Rabbit</string>
+  <string name="animals_dragon">Dragon</string>
+  <string name="animals_snake">Snake</string>
+  <string name="animals_horse">Horse</string>
+  <string name="animals_sheep">Sheep</string>
+  <string name="animals_monkey">Monkey</string>
+  <string name="animals_chicken">Chicken</string>
+  <string name="animals_dog">Dog</string>
+  <string name="animals_pig">Pig</string>
 </resources>
