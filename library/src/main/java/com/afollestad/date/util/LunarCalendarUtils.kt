@@ -7,7 +7,7 @@ import com.afollestad.date.R
 /**
  * Author:你需要一台永动机
  * Date:2019-12-26 17:25
- * Description:
+ * Description:农历工具V1
  */
 object LunarCalendarUtils {
     /**
@@ -956,44 +956,6 @@ object LunarCalendarUtils {
         }
     }
 
-
-    /**
-     * 阳历转农历
-     */
-    fun solarDate2LunarDateDayInMonthStr(solarYear: Int, solarMonth: Int, solarDay: Int): String {
-        var dayInMonthStr = ""
-        val solar = Solar(solarYear, solarMonth, solarDay)
-        val lunar = solarToLunar(solar)
-        val holidayOfLunar = getLunarHoliday(
-            lunar.lunarYear,
-            lunar.lunarMonth,
-            lunar.lunarDay
-        )
-
-        //Log.d("pmm", "农历：${lunar.toString()} 农历假期：${holidayOfLunar}")
-        val holidayOfSolar = CalendarUtils.getHolidayFromSolar(
-            solar.solarYear,
-            solar.solarMonth - 1,
-            solar.solarDay
-        )
-        //Log.d("pmm", "公历历：${solar.toString()} 公历假期：${holidayOfSolar}")
-        if (holidayOfLunar.isNotBlank()) {
-            dayInMonthStr = holidayOfLunar
-        } else if (holidayOfSolar.isNotBlank()) {
-            dayInMonthStr = holidayOfSolar
-        } else {
-            if (lunar.lunarDay == 1) {
-                val lunarFirstDayStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
-                dayInMonthStr = lunarFirstDayStr
-            } else {
-                dayInMonthStr = getLunarDayString(lunar.lunarDay)
-            }
-        }
-
-        return dayInMonthStr
-    }
-
-
     /**
      *
      * @author:518ad-ccn
@@ -1112,5 +1074,59 @@ object LunarCalendarUtils {
         val lunarMonthStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
         val lunarDayStr = getLunarDayString(lunar.lunarDay)
         return "${getTGDZName(lunar.lunarYear)}${getAnimalYearName(lunar.lunarYear)}年 $lunarMonthStr$lunarDayStr"
+    }
+
+
+    /**
+     * 获取在日历里的农历Str
+     * @param year 阳历 年
+     * @param month 阳历 月
+     * @param day 阳历 日
+     */
+    fun getLunarStrInCalendar(year: Int, month: Int, day: Int): String {
+        var dayInMonthStr = ""
+        val solar = Solar(year, month, day)
+        val lunar = solarToLunar(solar)
+        //农历节日
+        val holidayOfLunar = getLunarHoliday(
+            lunar.lunarYear,
+            lunar.lunarMonth,
+            lunar.lunarDay
+        )
+        //节假日
+        val holidayOfSolar = CalendarUtils.getHolidayFromSolar(
+            solar.solarYear,
+            solar.solarMonth - 1,
+            solar.solarDay
+        )
+
+//        val festival = LunarCalendarUtilsV2.getFestival(year,month, day)
+//        if (festival.isNotBlank()){
+//            dayInMonthStr = festival
+//        }else{
+//            //农历大写
+//            if (lunar.lunarDay == 1) {
+//                val lunarFirstDayStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
+//                dayInMonthStr = lunarFirstDayStr
+//            } else {
+//                dayInMonthStr = getLunarDayString(lunar.lunarDay)
+//            }
+//        }
+
+        if (holidayOfLunar.isNotBlank()) {
+            dayInMonthStr = holidayOfLunar
+        } else if (holidayOfSolar.isNotBlank()) {
+            dayInMonthStr = holidayOfSolar
+        } else {
+            //农历大写
+            if (lunar.lunarDay == 1) {
+                val lunarFirstDayStr = getLunarFirstDayString(lunar.lunarMonth, lunar.isLeap)
+                dayInMonthStr = lunarFirstDayStr
+            } else {
+                dayInMonthStr = getLunarDayString(lunar.lunarDay)
+            }
+        }
+
+        return dayInMonthStr
     }
 }

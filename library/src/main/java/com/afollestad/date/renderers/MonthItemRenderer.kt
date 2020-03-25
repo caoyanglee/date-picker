@@ -79,7 +79,7 @@ internal class MonthItemRenderer(private val config: DatePickerConfig) {
                 val day = dayOfMonth.date
                 var dayInMonthStr = dayOfMonth.date.positiveOrEmptyAsString()
                 if (dayInMonthStr.isNotBlank()) {
-                    dayInMonthStr += "\n${LunarCalendarUtils.solarDate2LunarDateDayInMonthStr(
+                    dayInMonthStr += "\n${LunarCalendarUtils.getLunarStrInCalendar(
                         year,
                         month,
                         day
