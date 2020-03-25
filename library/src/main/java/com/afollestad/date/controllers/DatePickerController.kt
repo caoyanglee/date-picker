@@ -15,6 +15,7 @@
  */
 package com.afollestad.date.controllers
 
+import android.util.Log
 import androidx.annotation.CheckResult
 import androidx.annotation.IntRange
 import androidx.annotation.VisibleForTesting
@@ -63,7 +64,16 @@ internal class DatePickerController(
     }
   }
 
+  private fun getYearAndMonth(monthCalendar:Calendar):Pair<Int,Int> = Pair(
+    first = monthCalendar.get(Calendar.YEAR),
+    second = monthCalendar.get(Calendar.MONTH)+1
+  )
+
   fun previousMonth() {
+    monthGraph?.let {
+      val (year,month) = getYearAndMonth(it.calendar)
+      if (year==1901&&month==1)return
+    }
     currentMode = CALENDAR
     val calendar = viewingMonth!!.asCalendar(1)
         .decrementMonth()
@@ -73,6 +83,10 @@ internal class DatePickerController(
   }
 
   fun nextMonth() {
+    monthGraph?.let {
+      val (year,month) = getYearAndMonth(it.calendar)
+      if (year==2101&&month==12)return
+    }
     currentMode = CALENDAR
     val calendar = viewingMonth!!.asCalendar(1)
         .incrementMonth()
