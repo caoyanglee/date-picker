@@ -46,7 +46,7 @@ dependencies {
 
   implementation 'androidx.recyclerview:recyclerview:' + versions.recyclerView
   api 'com.google.android.material:material:' + versions.material
-
+  api 'cn.6tail:lunar:1.1.1'//计算日期
   testImplementation 'junit:junit:' + versions.junit
   testImplementation 'org.mockito:mockito-core:' + versions.mockito
   testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:' + versions.mockitoKotlin

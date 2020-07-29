@@ -15,7 +15,6 @@
  */
 package com.afollestad.date.renderers
 
-import android.graphics.Color
 import android.view.Gravity.CENTER
 import android.view.View
 import android.widget.TextView
@@ -26,13 +25,14 @@ import com.afollestad.date.data.MonthItem.DayOfMonth
 import com.afollestad.date.data.MonthItem.WeekHeader
 import com.afollestad.date.data.NO_DATE
 import com.afollestad.date.dayOfWeek
-import com.afollestad.date.util.CalendarUtils
-import com.afollestad.date.util.LunarCalendarUtils
 import com.afollestad.date.util.Util.createCircularSelector
 import com.afollestad.date.util.Util.createTextSelector
 import com.afollestad.date.util.onClickDebounced
-import com.afollestad.date.util.resolveColor
-import java.util.Calendar
+import com.nlf.calendar.Lunar
+import com.nlf.calendar.util.HolidayUtil
+import com.nlf.calendar.util.LunarUtil
+import com.nlf.calendar.util.SolarUtil
+import java.util.*
 
 /** @author Aidan Follestad (@afollestad) */
 internal class MonthItemRenderer(private val config: DatePickerConfig) {
@@ -71,19 +71,33 @@ internal class MonthItemRenderer(private val config: DatePickerConfig) {
         rootView.background = null
 
         textView.apply {
-            setTextColor(createTextSelector(context, config.selectionColor,config.textIconColor))
+            setTextColor(createTextSelector(context, config.selectionColor, config.textIconColor))
             //是否开启农历
             if (config.enableChineseCalendar) {
                 val year = dayOfMonth.month.year
-                val month = dayOfMonth.month.month + 1
+                val month = dayOfMonth.month.month//后续计算需要+1
                 val day = dayOfMonth.date
                 var dayInMonthStr = dayOfMonth.date.positiveOrEmptyAsString()
+
                 if (dayInMonthStr.isNotBlank()) {
-                    dayInMonthStr += "\n${LunarCalendarUtils.getLunarStrInCalendar(
-                        year,
-                        month,
-                        day
-                    )}"
+
+                    //节日
+                    var targetStr = ""
+                    val lunar = Lunar(Calendar.getInstance().apply {
+                        set(year, month, day)
+                    }.time)
+                    val jieQiStr = if (lunar.jie.isNotBlank()) lunar.jie else lunar.qi//节气
+                    val festivalStr = LunarUtil.FESTIVAL["${lunar.month}-${lunar.day}"]//农历节日
+                    val solarStr = SolarUtil.FESTIVAL["${month+1}-$day"]//阳历节日
+                    val chineseDay = lunar.dayInChinese//中文日
+                    targetStr = when {
+                        !jieQiStr.isNullOrBlank() -> jieQiStr
+                        !festivalStr.isNullOrBlank() -> festivalStr
+                        !solarStr.isNullOrBlank() -> solarStr
+                        !chineseDay.isNullOrBlank() -> chineseDay
+                        else -> ""
+                    }
+                    dayInMonthStr += "\n${targetStr}"
                 }
                 text = dayInMonthStr
             } else {
