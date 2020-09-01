@@ -34,8 +34,9 @@
     <item name="android:visibility">gone</item>
   </style>
 
-  <style name="DatePicker.EditInput" >
+  <style name="DatePicker.EditInput">
     <item name="android:textSize">@dimen/edit_input_text_size</item>
+    <item name="android:background">#00000000</item>
   </style>
 
   <style name="DatePicker.Chevron">

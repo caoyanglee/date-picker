@@ -1,54 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="com.afollestad.date.DatePicker"
-    >
+    tools:parentTag="com.afollestad.date.DatePicker">
 
-  <!-- Main Header -->
-  <TextView
-      android:id="@+id/picker_title"
-      style="@style/DatePicker.HeaderTitle"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:background="#8E24AA"
-      tools:text="1995"
-      />
-  <TextView
-      android:id="@+id/current_date"
-      style="@style/DatePicker.HeaderDate"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      tools:background="#8E24AA"
-      tools:text="Fri, Jul 28"
-      />
-  <androidx.appcompat.widget.AppCompatImageView
-      android:id="@+id/edit_mode_toggle"
-      style="@style/DatePicker.EditModeToggle"
-      />
-
-  <!-- Input Mode Field -->
-  <com.google.android.material.textfield.TextInputLayout
-      android:id="@+id/edit_mode_input"
-      style="@style/DatePicker.EditInputLayout"
-      >
-    <com.google.android.material.textfield.TextInputEditText
+    <!-- Main Header -->
+    <TextView
+        android:id="@+id/picker_title"
+        style="@style/DatePicker.HeaderTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="date"
-        style="@style/DatePicker.EditInput"
-        />
-  </com.google.android.material.textfield.TextInputLayout>
+        tools:background="#8E24AA"
+        tools:text="1995" />
 
-  <include layout="@layout/calendar_page" />
+    <TextView
+        android:id="@+id/current_date"
+        style="@style/DatePicker.HeaderDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:background="#8E24AA"
+        tools:text="Fri, Jul 28" />
 
-  <!-- Years grid -->
-  <View
-      android:id="@+id/year_grid_divider"
-      style="@style/Divider"
-      />
-  <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/year_grid"
-      style="@style/YearList"
-      />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/edit_mode_toggle"
+        style="@style/DatePicker.EditModeToggle" />
+
+    <!-- Input Mode Field -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/edit_mode_input"
+        style="@style/DatePicker.EditInputLayout">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/DatePicker.EditInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <include layout="@layout/calendar_page" />
+
+    <!-- Years grid -->
+    <View
+        android:id="@+id/year_grid_divider"
+        style="@style/Divider" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/year_grid"
+        style="@style/YearList" />
 
 </merge>

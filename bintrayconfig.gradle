@@ -5,7 +5,7 @@ if (!project.rootProject.file('local.properties').exists()) {
   println "Not applying bintrayconfig.gradle"
   return
 }
-apply plugin: 'com.novoda.bintray-release'
+//apply plugin: 'com.novoda.bintray-release'
 
 def getBintrayUserAndKey() {
   Properties properties = new Properties()
@@ -30,21 +30,21 @@ task checkBintrayConfig {
   }
 }
 
-afterEvaluate {
-  bintrayUpload.dependsOn checkBintrayConfig
-}
+//afterEvaluate {
+//  bintrayUpload.dependsOn checkBintrayConfig
+//}
 
-def (user, key) = getBintrayUserAndKey()
-publish {
-  bintrayUser = user
-  bintrayKey = key
-  userOrg = 'drummer-aidan'
-  groupId = 'com.afollestad'
-  artifactId = 'date-picker'
-  publishVersion = versions.publishVersion
-  desc = 'A responsive date picker widget for Android, written in Kotlin.'
-  website = 'https://github.com/afollestad/date-picker'
-  dryRun = false
-}
+//def (user, key) = getBintrayUserAndKey()
+//publish {
+//  bintrayUser = user
+//  bintrayKey = key
+//  userOrg = 'drummer-aidan'
+//  groupId = 'com.afollestad'
+//  artifactId = 'date-picker'
+//  publishVersion = versions.publishVersion
+//  desc = 'A responsive date picker widget for Android, written in Kotlin.'
+//  website = 'https://github.com/afollestad/date-picker'
+//  dryRun = false
+//}
 
-ext.modulePackageId = publish.groupId + '.' + publish.artifactId
+//ext.modulePackageId = publish.groupId + '.' + publish.artifactId
