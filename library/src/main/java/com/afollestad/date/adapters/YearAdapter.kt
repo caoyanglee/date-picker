@@ -60,7 +60,7 @@ internal class YearAdapter(
     }
   private val yearRange: Pair<Int, Int> = with(Calendar.getInstance().year) {
 //    Pair(this - 100, this + 100)
-    Pair(1900, 2101)
+    Pair(1901, 2100)
   }
 
   init {

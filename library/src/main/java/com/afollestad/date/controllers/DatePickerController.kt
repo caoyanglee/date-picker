@@ -72,7 +72,7 @@ internal class DatePickerController(
   fun previousMonth() {
     monthGraph?.let {
       val (year,month) = getYearAndMonth(it.calendar)
-      if (year==1901&&month==1)return
+      if (year==1902&&month==1)return
     }
     currentMode = CALENDAR
     val calendar = viewingMonth!!.asCalendar(1)
@@ -85,7 +85,7 @@ internal class DatePickerController(
   fun nextMonth() {
     monthGraph?.let {
       val (year,month) = getYearAndMonth(it.calendar)
-      if (year==2101&&month==12)return
+      if (year==2100&&month==12)return
     }
     currentMode = CALENDAR
     val calendar = viewingMonth!!.asCalendar(1)

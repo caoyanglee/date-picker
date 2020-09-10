@@ -15,6 +15,8 @@
  */
 package com.afollestad.date.renderers
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.view.Gravity.CENTER
 import android.view.View
 import android.widget.TextView
@@ -84,6 +86,7 @@ internal class MonthItemRenderer(private val config: DatePickerConfig) {
                     //节日
                     var targetStr = ""
                     val lunar = Lunar(Calendar.getInstance().apply {
+                        //Log.e("pmm", "renderDayOfMonth:year=$year month=$month day=$day ", )
                         set(year, month, day)
                     }.time)
                     val jieQiStr = if (lunar.jie.isNotBlank()) lunar.jie else lunar.qi//节气
